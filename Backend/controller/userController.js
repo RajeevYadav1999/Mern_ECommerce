@@ -32,6 +32,10 @@ export const loginUser=handleAsyncError(async(req,res,next)=>{
    if(!user){
     return next(new HandleError("Invalid Email or password",401))
    }
+   const isPasswordValid=await user.verifyPassword(password);
+   if(!isPasswordValid){
+        return next(new HandleError("Invalid Email or password",401))
+   }
    const token=user.getJWTToken();
    res.status(200).json({
     success:true,
