@@ -2,6 +2,7 @@ import handleAsyncError from '../middleware/handleAsyncError.js'
 import User from '../models/userModel.js'
 import HandleError from '../utils/handleError.js';
 import handleError from '../utils/handleError.js'
+import { sendToken } from '../utils/jwtToken.js';
 export const registerUser = handleAsyncError(async(req, res, next)=>{
     const {name,email,password}=req.body;
 
@@ -14,12 +15,7 @@ export const registerUser = handleAsyncError(async(req, res, next)=>{
             url:"This is temp url"
         }
     })
-    const token = user.getJWTToken();
-    res.status(201).json({
-        success:true,
-        user,
-        token
-    })
+    sendToken(user,201,res)
 })
 
 // Login
@@ -36,10 +32,5 @@ export const loginUser=handleAsyncError(async(req,res,next)=>{
    if(!isPasswordValid){
         return next(new HandleError("Invalid Email or password",401))
    }
-   const token=user.getJWTToken();
-   res.status(200).json({
-    success:true,
-    user,
-    token
-   })
+   sendToken(user,200,res)
 })
