@@ -12,7 +12,6 @@ const {token}=req.cookies;
 
     const decodedData = jwt.verify(token, process.env.JWT_SECRET_KEY
     );
-    console.log(decodedData);
     req.user=await User.findById(decodedData.id)
     next();
 })
