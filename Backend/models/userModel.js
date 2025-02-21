@@ -44,12 +44,13 @@ const userSchema = new mongoose.Schema({
 
 //? Password hashing
 userSchema.pre('save', async function(next){
-    this.password=await bcryptjs.hash(this.password, 10)
     //! 1st - updating profile(name, email, image)--hashed password will be hashed again ❌
     // 2nd - Update password ✅ 
     if(!this.isModified('password')){
         return next();
     }
+    this.password=await bcryptjs.hash(this.password, 10)
+    next();
 })
 
 userSchema.methods.getJWTToken=function(){
